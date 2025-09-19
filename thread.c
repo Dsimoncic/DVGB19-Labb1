@@ -10,15 +10,16 @@ int N;
 int timeinterval;
 int counter=0;
 int bufferfull=0;
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
 
 void* prodthread(void* arg) {
-    printf("Hej, jag är en tråd \n");
+ 
     return NULL;
 }
 
 void* consthread(void* arg) {
-    printf("Hej, jag är en consumer tråd\n");
+    
     return NULL;
 }
 
@@ -55,21 +56,37 @@ int main(void) {
         return 1;
     }
     while(true){
+        
         counter++;
        
        
 
-        if(buffersize==1){
-            // buffer{[0] lägg i en consumer thread
-            // for loop för att flytta ner alla värden ett steg. sista blir ledig
-            //buffer[buffersize]=counter;
-
+        if(bufferfull==1){
+            
+            pthread_mutex_lock(&lock);
+            buffer[1];
+            pthread_mutex_unlock(&lock);
+           
+            for(int i = 0; i < buffersize; i++) {
+                buffer[i]=buffer[i+1];
+            }
+            buffer[buffersize]=counter;
+            printf("Sista plats:%d\n",buffer[buffersize]);
+            
+           
+            
         }
+
+
+
+        
         if(bufferfull==0){
             buffer[counter] = counter;
              printf("antal counter %d\n",buffer[counter]);
+
             if(counter==buffersize){
                 bufferfull=1;
+                
             }
         }
 
@@ -83,11 +100,11 @@ int main(void) {
 
     pthread_join(prod, NULL);
 
-    printf("Tråden är klar \n");
+    //printf("Tråden är klar \n");
 
     for(int i = 0; i < N; i++) {
         pthread_join(cons[i], NULL);
-        printf("Tråden %d är klar\n", i);
+        //printf("Tråden %d är klar\n", i);
     }
 
     return 0;
