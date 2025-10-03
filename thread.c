@@ -10,102 +10,105 @@ int N;
 int timeinterval;
 int counter=0;
 int bufferfull=0;
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t not_empty = PTHREAD_COND_INITIALIZER;
+static pthread_cond_t not_full = PTHREAD_COND_INITIALIZER;
+volatile sig_atomic_t stop = 0;
+
+static void* sigint(int sig) {
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 void* prodthread(void* arg) {
- 
-    return NULL;
+
+    while(stop == 0){   // kollar ctrl-c
+        if (stop == 1) break;
+    }
+
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void* consthread(void* arg) {
+while(stop){
+
+
+
     
-    return NULL;
 }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int main(void) {
 
 
-    printf("Enter number of consumers: ");
+
+    printf("Ange antal konsumenter: ");
     scanf("%d", &N);
 
-    printf("Enter the buffersize: ");
+    printf("Ange Bufferstorlek: ");
     scanf("%d", &buffersize);
 
-    printf("Enter the time interval: ");
-    scanf("%d", &timeinterval);
+    printf("Ange tidsintervall");
+    scanf("%d", timeinterval);
 
 
-    int buffer[buffersize];
-
-    pthread_t cons[N];
-    
-
-    for(int i = 0; i < N; i++) {
-        if(pthread_create(&cons[i], NULL, consthread, NULL) != 0) {
-            perror("Kunde inte skapa tråd");
-            return 1;
-        }
-     }
-
-    pthread_t prod;
-
-    
-    if(pthread_create(&prod, NULL, prodthread, NULL) != 0) {
-        perror("Kunde inte skapa tråd");
-        return 1;
-    }
-    while(true){
-        
-        counter++;
-       
-       
-
-        if(bufferfull==1){
-            
-            pthread_mutex_lock(&lock);
-            buffer[1];
-            pthread_mutex_unlock(&lock);
-           
-            for(int i = 0; i < buffersize; i++) {
-                buffer[i]=buffer[i+1];
-            }
-            buffer[buffersize]=counter;
-            printf("Sista plats:%d\n",buffer[buffersize]);
-            
-           
-            
-        }
-
-
-
-        
-        if(bufferfull==0){
-            buffer[counter] = counter;
-             printf("antal counter %d\n",buffer[counter]);
-
-            if(counter==buffersize){
-                bufferfull=1;
-                
-            }
-        }
-
-        
-
-        sleep(timeinterval);
-    }
-
-
-
-
-    pthread_join(prod, NULL);
-
-    //printf("Tråden är klar \n");
-
-    for(int i = 0; i < N; i++) {
-        pthread_join(cons[i], NULL);
-        //printf("Tråden %d är klar\n", i);
-    }
 
     return 0;
 }
